@@ -31,3 +31,8 @@ The pipeline of this tool is divided into three modules.
 
 #### 2. Get Regressors
    This module calculates regressors for the final GLM step. Since fMRI data is a sequence of volumn images of each scanning time, the regressors are respondingly calculated for each volumn. Based on the noise model from RETROICOR (Glover et al. 2000), regressors in PhysioNoise consist of cardiac and respiration regressors.
+
+   According to RETROICOR model, physiological noise components can be expressed by a low order Fourier series expanded in terms of cardiac and respiration phases.
+
+   ![equation](http://www.sciweavers.org/upload/Tex2Img_1658738485/render.png)
+
