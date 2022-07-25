@@ -18,13 +18,13 @@ The pipeline of this tool is divided into three modules.
 - [ ] registration to structural MRI
 - [ ] Stripping skull
 
-   The pipeline of this step is shown in the figure below. After transfering image values to fload, the reference for motion correction is collected from the middle volume of fMRI. Applying motion correction to the raw data with the reference, which is also plotted by last step. The preprocess gives back the frameworks of workflow, the plots of motion correction and preprocessed data.
+  The pipeline of this step is shown in the figure below. After transfering image values to fload, the reference for motion correction is collected from the middle volume of fMRI. Applying motion correction to the raw data with the reference, which is also plotted by last step. The preprocess gives back the frameworks of workflow, the plots of motion correction and preprocessed data.
 
-   ![1658736300888](image/README/1658736300888.png)
+  ![1658736300888](image/README/1658736300888.png)
 
-   The interfaces from the pipeline from the pipeline.
+  The interfaces from the pipeline.
 
-   ![1658736278731](image/README/1658736278731.png)
+  ![1658736278731](image/README/1658736278731.png)
 
 - *Concern: Respiration noise is part of motion correction. Interesting respirtion noise in GLM might be partly removed by motion correction, which may influence the results for respiration components.*
 
@@ -44,8 +44,7 @@ The pipeline of this tool is divided into three modules.
    ![equation](http://www.sciweavers.org/upload/Tex2Img_1658739209/render.png)
 
    In this step, contrasts of regressors are built to show the related regions of each regressor. Diagrams of first level analysis and contrasts are saved from this step.
-
-   ![image](/Users/xinyi/Documents/GitHub/fMRI-PhysioNoise/image/README/design_matrix.png)
+   ![1658741230644](image/README/1658741230644.png)
 
    Eventually, a residual will be saved to the output directory. And the z-statistical values of each regressor are also saved with a threshold of 3.5, from which the related noise regions can be recognized.
 
