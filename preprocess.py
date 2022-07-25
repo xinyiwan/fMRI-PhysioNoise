@@ -80,6 +80,7 @@ def prep(func,struct,outfile):
 
 
 # Define a function to pick file
+# used when the input is a list of files
 def pickfirst(files):
     if isinstance(files, list):
         return files[0]
