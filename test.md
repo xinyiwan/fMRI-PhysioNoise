@@ -1,17 +1,15 @@
 ##### Test differents combo of regressors
 
 - [ ] change regressors
-    - choose time to be the middle
 
-
+  - choose time to be the middle (1.1)
 - [ ] add regressors combos
-    - normal n*4 regressors
-    - n*4 + cross regressors
-    - n*4 + 2 more formula
 
-
+  - normal n*4 regressors
+  - n*4 + cross regressors
+  - n*4 + 2 more formula
 - [ ] changed in prep
-    - no motion correction
-    - add BET
-    - add anatomical registration
-    
+
+  - no motion correction
+  - add BET
+  - add anatomical registration
