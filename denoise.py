@@ -55,16 +55,6 @@ def denoise(infile, outfile, t_scan, regressors):
 
     '''
 
-    # Define the directory
-    # residual = os.path.join(outDir,'residual.nii.gz')
-    # inFile = os.path.join(inFile,"")
-    # regressors = os.path.join(regressors,"")
-    # outDir = os.path.join(outDir,"")
-
-    # inFile = sys.argv[1]
-    # outDir = sys.argv[2]
-    # regressors = sys.argv[3]
-
     # write directory
     if not os.path.exists(outfile):
         mkdir(outfile)

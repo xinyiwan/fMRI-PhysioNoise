@@ -77,8 +77,6 @@ def prep(func,struct,outfile):
     preproc.write_graph(dotfilename= outfile + "/gragh.dot",graph2use='orig')
 
 
-
-
 # Define a function to pick file
 # used when the input is a list of files
 def pickfirst(files):
