@@ -8,14 +8,14 @@ import os
 import numpy as np
 import click
 
-@click.command()
-@click.argument('func', type=click.Path())
-@click.argument('struc', type=click.Path())
-@click.argument('physio', type=click.Path())
-@click.argument('outfile', type=click.Path())
-@click.argument('tr')
-@click.argument('order')
-@click.argument('samplerate', type=click.INT)
+# @click.command()
+# @click.argument('func', type=click.Path())
+# @click.argument('struc', type=click.Path())
+# @click.argument('physio', type=click.Path())
+# @click.argument('outfile', type=click.Path())
+# @click.argument('tr')
+# @click.argument('order')
+# @click.argument('samplerate', type=click.INT)
 
 def physio_denoise(func, struc, physio, outfile, tr, order, samplerate):
 
@@ -65,5 +65,5 @@ def physio_denoise(func, struc, physio, outfile, tr, order, samplerate):
     regressors = open(os.path.join(outfile,"physio","regressors.csv"),"r")
     denoise(in_file, outfile, tag, regressors)
 
-if __name__ == '__main__':
-    physio_denoise()
+# if __name__ == '__main__':
+#     physio_denoise()

@@ -7,6 +7,8 @@ from os.path import abspath
 import nipype.interfaces.utility as util     # utility
 from nibabel import load
 import click
+from nipype.interfaces.io import SelectFiles, DataSink
+
 
 
 # @click.command()
@@ -59,7 +61,6 @@ def prep(func,struct,outfile):
     preproc.connect(inputnode, ('func', getmiddlevolume), extract_ref, 't_min')
 
     # Datasink - creates output folder for important outputs
-    from nipype.interfaces.io import SelectFiles, DataSink
 
     # experiment_dir = '/Users/xinyi/Desktop/data/subject'
     # output_dir = '/Users/xinyi/Desktop/data/subject/datasink/prep0711'

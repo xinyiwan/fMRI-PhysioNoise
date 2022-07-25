@@ -53,7 +53,7 @@ def getregressors(txtpath, workdir, tr, order, samplerate):
     import pandas as pd 
     df = pd.DataFrame(dataset)
     df.columns = ['ppg','respiration','mri']
-    tag, n_scan = pulse_detect(df['mri'], workdir)
+    tag, n_scan = pulse_detect(df['mri'], workdir, tr)
     df = df.astype('float')
 
     # Limit the length of t_scan by comparing the ends
@@ -79,6 +79,14 @@ def getregressors(txtpath, workdir, tr, order, samplerate):
         t_reg = []
         for j in range(m):
             unit = [math.cos((j+1) * resp_phase[i]), math.sin((j+1) * resp_phase[i]), math.cos((j+1) * card_phase[i]), math.sin((j+1) * card_phase[i])]
+            # if j == 0 :
+            #     unit2 = [math.cos((j+1) * card_phase[i]) * math.cos((j+1) * resp_phase[i]),
+            #              math.sin((j+1) * card_phase[i]) * math.cos((j+1) * resp_phase[i]),
+            #              math.cos((j+1) * card_phase[i]) * math.sin((j+1) * resp_phase[i]),
+            #              math.sin((j+1) * card_phase[i]) * math.sin((j+1) * resp_phase[i])]
+            #     t_reg = np.concatenate((t_reg,unit,unit2))
+            # else:
+            #     t_reg = np.concatenate((t_reg,unit))
             t_reg = np.concatenate((t_reg,unit))
         regressors.append(t_reg)
     regressors = pd.DataFrame(regressors)
@@ -86,7 +94,7 @@ def getregressors(txtpath, workdir, tr, order, samplerate):
     return tag
 
 
-def pulse_detect(mri,workdir):
+def pulse_detect(mri, workdir,tr):
     # Get the time stamp of each MRI volume by checking the pulse value
     # tag contains all the t_scan
     t_scan = mri.astype(float)
@@ -104,6 +112,11 @@ def pulse_detect(mri,workdir):
             tag.append(index_p[i+1])
             ref = index_p[i+1]
     n_scan = len(tag)  
+
+    # Invoke the next line 
+    # when using the middle time of scanning to be the frame time
+    tag = [x+int(tr*5000) for x in tag]
+
     df = pd.DataFrame(tag)
     df.to_csv(workdir + '/mri_pulse.csv', index = None)
     return tag, n_scan
@@ -151,7 +164,7 @@ def getphase_res(df, t_scan, phase, workdir):
 
     num = len(hist[0])
     x = np.arange(num)
-    hist[0]
+    # hist[0]
 
     # Plot and Save the histogram of respiration
     import matplotlib.pyplot as plt
