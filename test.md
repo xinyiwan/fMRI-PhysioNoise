@@ -10,6 +10,8 @@
     - n*4 + 2 more formula
 
 
-- [ ] change reference in prep
-    - c
+- [ ] changed in prep
+    - no motion correction
+    - add BET
+    - add anatomical registration
     

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-PhysioNoise is a tool for physiological noise correction of fMRI. The core model of this tool is based on the noise model from RETROICOR (Glover et al. 2000), including cardiac and respiration caused noise in fMRI image.
+PhysioNoise is a tool for physiological noise correction of fMRI. The core model of this tool is based on the noise model from RETROICOR (Glover et al. 2000), including cardiac and respiration causing noise in fMRI image.
 
 The main idea of PhysioNoise is to build a GLM with noise as main components. Noise components come from RETROICOR noise model and are used as regressors in GLM. The residual of GLM will be the corrected fMRI data for furthur use.
 
@@ -34,7 +34,7 @@ The pipeline of this tool is divided into three modules.
 
    According to RETROICOR model, physiological noise components can be expressed by a low order Fourier series expanded in terms of cardiac and respiration phases.
 
-   ![equation](http://www.sciweavers.org/upload/Tex2Img_1658738485/render.png)
+   ![equation](http://www.sciweavers.org/upload/Tex2Img_1658742331/render.png)
 
    The cardiac phase and respiration phase are calculated from physiological signals. For each scanning time, a series of regressors are generated for denoise according to the given orders of Fourier expansion.
 
