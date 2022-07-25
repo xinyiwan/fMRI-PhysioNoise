@@ -36,3 +36,29 @@ The pipeline of this tool is divided into three modules.
 
    ![equation](http://www.sciweavers.org/upload/Tex2Img_1658738485/render.png)
 
+   The cardiac phase and respiration phase are calculated from physiological signals. For each scanning time, a series of regressors are generated for denoise according to the given orders of Fourier expansion.
+
+#### 3. Denoise
+   The procedure of denoise is based on GLM(Generalized linear model). To find the regions that best explain the data with calculated noise regressors, a first level analysis of fMRI data is built. Ideally, the regions found by the analysis should be related to physiological noise regressors. And the residual of the GLM is regarded as the denoised data.
+   ![equation](http://www.sciweavers.org/upload/Tex2Img_1658739209/render.png)
+
+   In this step, contrasts of regressors are built to show the related regions of each regressor. Diagrams of first level analysis and contrasts are saved from this step.
+
+   ![image](/Users/xinyi/Documents/GitHub/fMRI-PhysioNoise/image/README/design_matrix.png)
+
+   Eventually, a residual will be saved to the output directory. And the z-statistical values of each regressor are also saved with a threshold of 3.5, from which the related noise regions can be recognized.  
+
+## Example of regions from noise regressors
+
+   The order used in RETROICOR model is 2. And the order of regressors are:
+
+   ![equation](http://www.sciweavers.org/upload/Tex2Img_1658740587/render.png)
+
+   Eight obvious regions according to eight noise regressors are shown below.
+   ![image](/Users/xinyi/Documents/GitHub/fMRI-PhysioNoise/image/README/example.png)
+
+
+   
+
+
+   
