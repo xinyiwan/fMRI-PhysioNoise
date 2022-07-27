@@ -1,3 +1,4 @@
+import imp
 from operator import imod
 import click
 import sys
@@ -15,6 +16,7 @@ from nilearn.plotting import plot_contrast_matrix
 import nibabel as nib
 from nilearn import plotting
 import argparse
+from nilearn.maskers import NiftiSpheresMasker
 
 
 # @click.command()
@@ -132,6 +134,8 @@ def denoise(infile, outfile, t_scan, regressors):
     # Save the residual data for the further use
 
     nib.save(fmri_glm.residuals[0],os.path.join(outDir,"residual.nii.gz"))
+
+
     return fmri_glm.residuals[0]
 
 
