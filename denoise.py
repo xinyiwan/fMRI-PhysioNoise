@@ -17,13 +17,14 @@ import nibabel as nib
 from nilearn import plotting
 import argparse
 from nilearn.maskers import NiftiSpheresMasker
+from nilearn.reporting import get_clusters_table
 
 
-# @click.command()
-# @click.argument("infile", type=click.Path())
-# @click.argument("outfile", type=click.Path())
-# @click.argument("t_scan", type=click.Path())
-# @click.argument("regressors", type=click.Path())
+@click.command()
+@click.argument("infile", type=click.Path())
+@click.argument("outfile", type=click.Path())
+@click.argument("t_scan", type=click.Path())
+@click.argument("regressors", type=click.Path())
 
 
 def denoise(infile, outfile, t_scan, regressors):
@@ -37,10 +38,10 @@ def denoise(infile, outfile, t_scan, regressors):
 
     outDir:                 Full path to output directory
 
+    t_scan:                 Array for the scanning time
+
+
     regressors:             Full path to a csv file of regressors
-
-    tag:                    Array for the scanning time
-
 
     
     Output: 
@@ -76,9 +77,9 @@ def denoise(infile, outfile, t_scan, regressors):
         add_reg_names.append('L%s'%i)
     
     # input the time of scanning
-    # with open(t_scan) as file_name:
-    #     frame_times = np.loadtxt(file_name)
-    frame_times = t_scan
+    with open(t_scan) as file_name:
+        frame_times = np.loadtxt(file_name)
+    frame_times = frame_times[1:]
 
     # Define the empty tasks conditions
     conditions = []
@@ -95,6 +96,10 @@ def denoise(infile, outfile, t_scan, regressors):
         frame_times, events, drift_model=None,
         add_regs=reg, add_reg_names=add_reg_names, hrf_model=hrf_model)
 
+    # drop the constant in matrix
+    X1.pop(X1.columns[-1]) 
+
+
     
     fig, (ax1) = plt.subplots(figsize=(10, 6), nrows=1, ncols=1)
     plot_design_matrix(X1, ax=ax1)
@@ -103,14 +108,14 @@ def denoise(infile, outfile, t_scan, regressors):
 
 
     # Build the 1st level model
-    fmri_glm = FirstLevelModel(
-                           minimize_memory=False)
+    fmri_glm = FirstLevelModel(t_r=1.7, minimize_memory=False, signal_scaling = False)
+
     # Get the number of components and constant(residual)
     n_columns = X1.shape[1]
     mean = mean_img(infile)
     
     # Build contrasts for each noise component
-    contrasts = np.zeros([index,index+1])
+    contrasts = np.zeros([index,index])
     for i in range(index):
         contrasts[i,i] = 1
 
@@ -128,16 +133,62 @@ def denoise(infile, outfile, t_scan, regressors):
         # Plot the contrasts
         plotting.plot_stat_map(
             z_img,
-            bg_img=mean, threshold=3, 
+            bg_img=mean, threshold=2, 
             title="zsta_component_%s"%i,
             output_file = os.path.join(outDir,"zstat_cont_%s.png"%i))
     # Save the residual data for the further use
 
     nib.save(fmri_glm.residuals[0],os.path.join(outDir,"residual.nii.gz"))
 
+    ## ANALYSIS
+    table = get_clusters_table(z_img, stat_threshold=2,
+                           cluster_threshold=None).set_index('Cluster ID', drop=True)
+    # get the 8 largest clusters' max x, y, and z coordinates
+    n_clusters = len(table.head())
+    coords = table.loc[range(1,n_clusters+1), ['X', 'Y', 'Z']].values
 
-    return fmri_glm.residuals[0]
+    # extract time series from each coordinate
+    masker = NiftiSpheresMasker(coords)
+    real_timeseries = masker.fit_transform(infile)
+    predicted_timeseries = masker.fit_transform(fmri_glm.predicted[0])
+    corrected_timeseries = masker.fit_transform(fmri_glm.residuals[0])
+
+    # colors for each of the clusters
+    colors = ['blue', 'navy', 'purple', 'magenta', 'olive']
+    # plot the time series and corresponding locations
+    fig1, axs1 = plt.subplots(2, n_clusters)
+    for i in range(0, n_clusters):
+        # plotting time series
+        # axs1[0, i].set_title('Cluster peak {}\n'.format(coords[i]))
+        axs1[0, i].plot(real_timeseries[:, i], c=colors[i], lw=2)
+        axs1[0, i].plot(corrected_timeseries[:, i], c='r', ls='--', lw=2)
+        axs1[0, i].plot(predicted_timeseries[:, i], c='g', ls='--', lw=2)
+        axs1[0, i].set_xlabel('Time')
+        axs1[0, i].set_ylabel('Signal intensity', labelpad=0)
+
+        # plotting image below the time series
+        roi_img = plotting.plot_stat_map(
+            z_img, cut_coords=[coords[i][2]], threshold=2, figure=fig1,
+            axes=axs1[1, i], display_mode='z', colorbar=False, bg_img=mean)
+        roi_img.add_markers([coords[i]], colors[i], 300)
+
+        # plotting frequency specturm
+        frequency, power_spectrum = make_specturm(predicted_timeseries[:, i],1.7)
+        axs1[2, i].plot(frequency, power_spectrum)
+        
+    fig1.set_size_inches(24, 14)
+    fig1.savefig(os.path.join(outDir,"5Clusters_effect.png"))
 
 
-# if __name__ == '__main__':
-#     denoise()
+
+def make_specturm(data,tr):
+    sampling_rate = 1/tr
+    fourier_transform = np.fft.rfft(data)
+    abs_fourier_transform = np.abs(fourier_transform)
+    power_spectrum = np.square(abs_fourier_transform)
+    frequency = np.linspace(0, sampling_rate/2, len(power_spectrum))
+
+    return frequency,power_spectrum
+
+if __name__ == '__main__':
+    denoise()
