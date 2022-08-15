@@ -1,19 +1,26 @@
 ## Introduction
 
-- Brief intro of the purpose of tools for denoising
+- fMRI origin
+- noise origin
+- Why denoise
 - purpose
 
-Physiological noise is one of the significant motion in functional magnetic resonance imaging(fMRI). fMRI uses magnetic imaging to measure brain activity by measuring changes in local oxygenation of blood, which in turn reflects the amount of local brain activity.[1]
+Physiological noise is one of the significant motion artefacts in functional magnetic resonance imaging(fMRI). fMRI uses magnetic imaging to measure brain activity by measuring changes in local oxygenation of blood, which in turn reflects the amount of local brain activity.[1] However, physiological pulsations related to cardiac pulsation and respiration would perturb blood-oxygen level contrast(BOLD). First, respiration is inevitable. During data aquisition, even the perfect subject could not avoid chest movement from breathing, which would result in head motion in the magnetic field. So the MR images are likely to be distorted by respiration in a way. Second, cardiac pulsation could directly influence the BOLD signal especially in the region with large blood vessels. For example, cerebrospinal fluid(CSF) flow is modulated by both the cardiac and respiratory cycles, resulting in additional signal changes.[2] 
 
-Physiological pulsations related to cardiac and breathing would perturb blood-oxygen level contrast(BOLD), which may lead to less statistical sensitivity to some task-related research. Moreover, for resting-state fMRI data, problems caused by physiological noise could be more severe to the plausibility of research.
+(The introversial idea about denoising physiological noise. Example, resting state) 
+
+Purpose:
+
+The main purpose of this research is to provide a robust tool in denoising physiological artefacts, which will give back a 'cleaned' data for the furthur use.
+
 
 ## Background
 
-- Brief intro about fMRI
-- Origin of noises and its impact
-- Introduction of the model
-- Existing methods or tools
-- The design idea of this tool and its prerequisite
+- GLM model of neural signal. Basis.
+- Role of physiological signal
+- Difficulty in denoise (global..)
+- Existing methods for denoising
+
 
 ## Materials and Method
 
@@ -26,6 +33,11 @@ Physiological pulsations related to cardiac and breathing would perturb blood-ox
 
 ## Results and discussion
 
+- The problem about removing interesting signal as well
+- Global noise reduction( Choose only WM or CSF that are less influenced by the )
+
 ### Reference
 
-[1]
+[1] handbook
+
+[2] The role of physiological
