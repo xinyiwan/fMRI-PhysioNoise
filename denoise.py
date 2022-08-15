@@ -156,7 +156,7 @@ def denoise(infile, outfile, t_scan, regressors):
     # colors for each of the clusters
     colors = ['blue', 'navy', 'purple', 'magenta', 'olive']
     # plot the time series and corresponding locations
-    fig1, axs1 = plt.subplots(2, n_clusters)
+    fig1, axs1 = plt.subplots(3, n_clusters)
     for i in range(0, n_clusters):
         # plotting time series
         # axs1[0, i].set_title('Cluster peak {}\n'.format(coords[i]))
@@ -175,7 +175,7 @@ def denoise(infile, outfile, t_scan, regressors):
         # plotting frequency specturm
         frequency, power_spectrum = make_specturm(predicted_timeseries[:, i],1.7)
         axs1[2, i].plot(frequency, power_spectrum)
-        
+
     fig1.set_size_inches(24, 14)
     fig1.savefig(os.path.join(outDir,"5Clusters_effect.png"))
 
