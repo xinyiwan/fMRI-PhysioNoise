@@ -1,0 +1,20 @@
+Physiological noise is one of the significant artefacts in functional magnetic resonance imaging (fMRI).
+fMRI uses magnetic imaging to measure brain activity by measuring changes in local oxygenation of blood, which in turn reflects the amount of local brain activity. \cite{poldrack2011handbook}
+However, physiological pulsations related to cardiac pulsation and respiration would perturb blood-oxygen level contrast (BOLD) and add nuisance to fMRI data, which are the key challenges in this area. First, respiration is inevitable. 
+During data aquisition, even the perfect subject could not avoid chest movement from breathing, which would result in head motion in the magnetic field. 
+So that the MR images are likely to be distorted by respiration in a way.
+Second, cardiac pulsation could directly influence the BOLD signal especially in the region with large blood vessels. 
+For example, cerebrospinal fluid (CSF) flow is modulated by both the cardiac and respiratory cycles, resulting in additional signal changes.\cite{birn2012role}
+
+The role of physiological noise in fMRI analysis deserves discussion. 
+Some studies prefer not performing a physiological correction on fMRI data because cardiac and respiratory related fluctuations may be correlated with variations in neuronal activity.\cite{birn2012role} 
+However, the spatial specificity of functional connectivity has been clearly demonstrated to be influenced by aliased physiological noise.\cite{lowe1998functional}
+A functional connectivity study\cite{dagli1999localization} by Dagli has shown that removing cardiac fluctuations resulted in a variance reduction of roughly 10\%–40\%, 
+depending on the region being investigated.\cite{dagli1999localization}
+The sensitivity of these regions near pulsatile vessels could be improved by physiological noise correction. 
+But another unarguable evidence is that heart rate variability is widely used as a measure of emotional arousal and autonomic nervous system activity.\cite{birn2012role} 
+All these facts remind us that physiological noise correction shoule be used carefully especially when the key factors in experiments are related to physiological responses.
+
+In this work, we provides a robust model-based tool XX in denoising physiological artefacts, which will give back a denoised data for further use. 
+The implementation of this tool is based on the model RETROICOR.\cite{glover2000image}
+This paper introduces the modules of this tool and explains results in each step from the example subject.
