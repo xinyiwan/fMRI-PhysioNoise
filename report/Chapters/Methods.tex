@@ -54,7 +54,22 @@ fMRI data. And a csv file recording each scan time will be generated in the work
 
 \subsubsection{Cardiac Regressors}
 
+In Physio Denoise, we choose a less invasive method of assess cardiac cycles, which is Photoplethysmogram (PPG). 
+PPG devices employ an optical sensor to measure the changes in coloration of the skin as blood perfuses through the arteries and capillaries with each heartbeat.\cite{van2019heartpy}
 
+With the help of HeartPy, the peak of the signal could be detected and marked, as it shows in Fig.\ref{fig:heart}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\columnwidth]{Figures/heartpy.png}
+    \caption{An example of PPG signal analyzed by HeartPy. The green points represent the accepted peaks,
+    while the red points are rejected by HeartPy. Peaks are considered low confidence if the interval created between two adjacent peaks deviates 
+    by more than 30\% of the mean peak-peak interval of the analysed segment.\cite{van2019heartpy}}
+    \label{fig:heart}
+\end{figure} 
+
+While a sequence of peaks from PPG signal is generated, two continous accepted peaks are found for the time stamp of each scan.
+The scan time will locate between these two peaks. So that cardiac phase value in the formula \ref{eqn:cardiac} could be gained.
 
 \subsubsection{Respiration Regressors}
 

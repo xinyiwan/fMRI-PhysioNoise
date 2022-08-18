@@ -1,4 +1,4 @@
-The goal of an fMRI data analysis is to analyze each voxel's time series to see whether the BOLD signal changes in response to some manipulation.\cite{poldrack2011handbook} 
+The goal of fMRI data analysis is to analyze each voxel's time series to see whether the BOLD signal changes in response to some manipulation.\cite{poldrack2011handbook} 
 And the method used for fMRI analysis in detection of signal changes is the general linear model(GLM). 
 GLM, a well-developed tool of linear systems analysis, is used widely to predict the responses of certain systems to a wide variety of inputs.\cite{cohen1997parametric}
 
@@ -21,6 +21,7 @@ And the order of Fouriour expression is configureable. In this work we used $M =
 
 For the calculation of cardiac phase, it is defined as
 \begin{equation}
+\label{eqn:cardiac}
     \phi_c(t) = 2\pi(t-t_1)/(t_2-t_1)
 \end{equation}
 
