@@ -30,8 +30,8 @@ Since recorded physiological signals are used as inputs without any preprcossing
 
 For the calculation of respiratory phase, depth and states of breathing will be both taken into consideration. 
 It is quite easy to imagine that a deeper breathe is more likely to bring a potential bulk motion of head. 
-And also the phase of respiration will be different from inhaling to exhaling. 
-Therefore, respiratory phase will be defined by both depth and state. 
+And also the phase of respiration is different from inhaling to exhaling. 
+Therefore, respiratory phase is defined by both depth and state. 
 State of inhaling or exhaling is more like polarity of phase, while depth is more like the amplitude value. 
 The signal of depth is recorded by a detecting belt wrapping around subject's chest. 
 To get the respiratory amplitude of the given time, a histogram-equalized transfer function is used, which is expressed  as :
@@ -44,10 +44,11 @@ First, all the signal values are normalized to the range $(0, Rmax)$. Then a his
 And in the $x$ domain, the bins of histogram are defined to be 100 bins. 
 If the normalized amplitude from the given time belongs to the $n$th bin, then the phase value will be calculated by dividing the sum value till $n$th bin by the sum of 100 bins.
 
-In the end, value from the divisor will multiple by $\pi$, so that the phase value will be in the range of $-\phi$ to $\phi$.
+In the end, value from the divisor will multiple by $\pi$, so that the phase value will be in the range of $-\pi$ to $\pi$.
 During data aquisition of fMRI, BOLD time series have time resolution, which refers to reprtition time or TR. 
-And by now MRI data will be either recorded by multi-slice or single slice at a time, which means the slices constructing the whole brain volumn come from different time during the TR. 
-Therefore, a single time stamp could not represent for all slices. 
+And by now MRI data will be either recorded by multi-slice or single slice at a time, which means the slices constructing the whole brain volumn come from different time stamp during the TR. 
+Therefore, a single time stamp could not represent for the whole volume. 
 However, applying different time stamps for each slice is also not practical. 
-The slices are collected in horizontal direction, and the region of interest for an artefact could be in any shape rather than only scattering on a horizontal slice. 
+Because the slices are collected in horizontal direction, and the region of interest for artefacts could be in any shape rather than only scattering on a horizontal slice. 
+So it is not meaningful to denoise slice by slice.
 To simplify the slice time problem, the middle time stamp in TR is chosen to calculate the physiological phases.
