@@ -25,11 +25,36 @@ respiration signal and time stamps,
 TR time, sample rate and working directory.
 
 \subsection{Softwares and Packages}
+
+(Introduction of needed toolds, to be continued.)
 \textbf{HeartPy}\cite{van2019heartpy},
 
+\textbf{Neurokit2}\cite{Makowski2021neurokit},
+
 \subsection{Data Preprocessing}
-\subsubsection{Alignment}
-\subsubsection{Motion Correction}
+
+Although Physio Denoise is used for denoising, the preprocessing of fMRI data is still essential.
+The preprcossing consists of alignment and motion correction, as it shown in Fig.\ref{fig:graph}.
+
+Alignment chooses the middle volume from the whole fMRI data as reference, and registers the other
+volumes to it.
+
+The main idea of step motion correction is to correct the noise from motion noise. 
+But differently from the respiratory motion of breathing, this motion correction
+refers to as bulk motion. During the scan, motion from subjects is inevitable.
+Bulk motion can have large effects on activation maps for analysis, 
+which usually occur at edges in the image; 
+this is due to the fact that large changes in image intensity can occur 
+when a voxel that has no brain tissue in it at one point 
+suddenly contains tissue due to motion.\cite{poldrack2011handbook}
+
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=0.7\columnwidth]{Figures/gragh.png}
+    \caption{The workflow of preprocessing of fMRI data}
+    \label{fig:graph}
+\end{figure}
 
 \subsection{Processing of Physiological data}
 The main idea of processing physiological data is to extract needed regressors for the noise model.
@@ -68,8 +93,67 @@ With the help of HeartPy, the peak of the signal could be detected and marked, a
     \label{fig:heart}
 \end{figure} 
 
-While a sequence of peaks from PPG signal is generated, two continous accepted peaks are found for the time stamp of each scan.
-The scan time will locate between these two peaks. So that cardiac phase value in the formula \ref{eqn:cardiac} could be gained.
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\columnwidth]{Figures/cardiac.png}
+    \caption{After detecting the peak in cardiac signal, the cardiac regressors from a second order Fourier expanded formula are generated with three MRI time stamps. 
+    The matrix represents the way regressors constructing the independent variables $X$ in GLM }
+    \label{fig:cardiac}
+\end{figure} 
+
+While a sequence of peaks from PPG signal is generated, 
+two continous accepted peaks are found for the time stamp of each scan.
+The scan time will locate between these two peaks. 
+So that cardiac phase value in the formula \ref{eqn:cardiac} could be gained. An example of 
+cardiac regressors calculation in Fig \ref{fig:cardiac} shows the process. 
+In the design of GLM, each row of variable matrix in formula \ref{eqn:glm} indicates all used regressors
+for one time stamp. The number of rows equals to the number of scan.
 
 \subsubsection{Respiration Regressors}
+
+Respiratory signal of subjects is collected by breathing belt, which warps around chest of subjects. 
+So the belt would deform with expiration and inspiration, the amplitude of signal from the 
+belt is recorded as respiratory signal. 
+
+As we introduce before, respiratory phase calculation considers both breathing state and depth.
+So in this part, it divides into two parts, state analysis and value calculation.
+
+To analyze the state of breathing, a novel tool NeuroKit2\cite{Makowski2021neurokit} is exploited 
+for detection. Inspiration, expiration and implausible periods are marked by NeuroKit2. 
+Silmilar to the way of finding cardiac phase, with time stamps from MRI data, a respiratory phase
+could be easily found with results from NeuroKit2. In Fig. \ref{fig:rsp_phase}, it shows part of the 
+respiratory sample as well as the phases. The curve going down indicates the expiration, which 
+phase value is $-1$. On the countary, a rising part represents inspiration with a phase value of $1$. 
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\columnwidth]{Figures/rsp_phase.png}
+    \caption{}
+    \label{fig:rsp_phase}
+\end{figure} 
+
+To quantify the depth of breathe, a normalized histogram collecting all the amplitude values
+shows a distribution of depth during the whole scan. 
+So that at each given time stamp, its amplitude could locate the postion in histogram by the normalized value in x corordinate,
+which is shown in the Fig.\ref{fig:hist}. For example, when the normalized amplitude is located in 
+The value for respiratory phase is gained by dividing area A by the sum of area A and B.
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\columnwidth]{Figures/histogram.png}
+    \caption{}
+    \label{fig:hist}
+\end{figure}
+
+However, the detection of breathing belt is based on physical motion that dosen't always give back
+perfect data. Sometimes, the belt might be too loose or tight in measurement. The over tightness usually leads
+to an abnormal amplitude that is higher than the normal range. In this work, abnormal signals will be 
+kicked out before being used into the histogram.
+
+Finally, phase value from the histogram will be given a polarity according to the state of the time.
+Same as the cardiac regressors, each time stamp would have multiple regressors based on the Fourier expansion and its order.
+
+
+\subsubsection{Noise Modeling}
+Using 
 

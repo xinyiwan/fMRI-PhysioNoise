@@ -150,7 +150,7 @@ def getphase_res(df, t_scan, phase, workdir):
     resp[:,0] = df[:,1]
 
     # Mark the unreliable data segments
-    resp[:,1] = np.where(resp[:,0] > 0.09, False, True)
+    resp[:,1] = np.where(resp[:,0] > 0.04, False, True)
 
     # Get the max and min value of respiration data
     max_value = np.max(resp[np.where(resp[:,1] == True),0])

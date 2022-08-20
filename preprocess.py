@@ -75,7 +75,7 @@ def prep(func,struct,outfile):
                  (motion_correct,datasink,[('out_file','motion.@res')]),
                  (plot_motion,datasink,[('out_file','motion.@fig')])])
     eg = preproc.run()
-    preproc.write_graph(dotfilename= outfile + "/gragh.dot",graph2use='orig')
+    preproc.write_graph(dotfilename= outfile + "/graph.dot",graph2use='orig')
 
 
 # Define a function to pick file
