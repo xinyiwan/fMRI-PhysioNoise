@@ -27,6 +27,12 @@ TR time, sample rate and working directory.
 \subsection{Softwares and Packages}
 
 (Introduction of needed toolds, to be continued.)
+
+\textbf{FSL},
+
+\textbf{Nilearn},
+
+
 \textbf{HeartPy}\cite{van2019heartpy},
 
 \textbf{Neurokit2}\cite{Makowski2021neurokit},
@@ -34,14 +40,17 @@ TR time, sample rate and working directory.
 \subsection{Data Preprocessing}
 
 Although Physio Denoise is used for denoising, the preprocessing of fMRI data is still essential.
-The preprcossing consists of alignment and motion correction, as it shown in Fig.\ref{fig:graph}.
+The preprcossing pipeline consists of alignment and motion correction, as it shown in Fig.\ref{fig:graph}.
 
 Alignment chooses the middle volume from the whole fMRI data as reference, and registers the other
-volumes to it.
+volumes to it. 
 
 The main idea of step motion correction is to correct the noise from motion noise. 
-But differently from the respiratory motion of breathing, this motion correction
-refers to as bulk motion. During the scan, motion from subjects is inevitable.
+But different from the respiratory motion of breathing, this motion correction
+is mainly bulk motion caused by subjects' movement. During the scan, motion noise is inevitable. 
+Keeping subjects completely still during the whole scan is impractical.
+Although small breaks are usually designed between each task during the scan in order to let subjects relax themselves, 
+behaviours like swallowing and blinking exsist.
 Bulk motion can have large effects on activation maps for analysis, 
 which usually occur at edges in the image; 
 this is due to the fact that large changes in image intensity can occur 
@@ -52,9 +61,16 @@ suddenly contains tissue due to motion.\cite{poldrack2011handbook}
 \begin{figure}[htp]
     \centering
     \includegraphics[width=0.7\columnwidth]{Figures/gragh.png}
-    \caption{The workflow of preprocessing of fMRI data}
+    \caption{The pipeline of preprocessing of fMRI data}
     \label{fig:graph}
 \end{figure}
+
+In order to model the physiological noise model more precisely, 
+this step aims to clean the raw data roughly as the fisrt step.
+Although in the whole motion noise, we still couldn't find a clear boundary
+to seperate physiological noise and nosie from purely movement, a motion correction will
+still help with the specificity in noise modeling. And the correction in 6 degree is plotted 
+as results.
 
 \subsection{Processing of Physiological data}
 The main idea of processing physiological data is to extract needed regressors for the noise model.
@@ -151,9 +167,19 @@ to an abnormal amplitude that is higher than the normal range. In this work, abn
 kicked out before being used into the histogram.
 
 Finally, phase value from the histogram will be given a polarity according to the state of the time.
-Same as the cardiac regressors, each time stamp would have multiple regressors based on the Fourier expansion and its order.
+Same as the cardiac regressors, each time stamp would have multiple regressors based 
+on the Fourier expansion and its order.
 
 
 \subsubsection{Noise Modeling}
-Using 
+
+Exploiting the idea of GLM, regressors from last step are independent variables in a GLM 
+equation, while a preprocessed fMRI data is the dependent varaible. 
+To find the region of interest(ROI) of different regressor, several contrasts are built and
+each contrast represents one regressor. With the help of statistical analysis, 
+Z-value maps from each contrast will show the specific region according to each regressor.
+A z-map with a given threshold indicates the regions in which 
+some noise signal is well expained by the according regressor.
+In other words, it displays the region that physiological noise exsists. 
+
 
