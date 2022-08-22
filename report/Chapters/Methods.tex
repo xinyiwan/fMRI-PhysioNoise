@@ -1,14 +1,13 @@
 \subsection{Overview}
-This section introduces modules and workflow of this tool.
 
-\begin{figure}[htp]
+\begin{figure*}
     \centering
-    \includegraphics[width=\columnwidth]{Figures/modules.png}
-    \caption{Workflow of Denoise Tool}
+    \includegraphics[width=0.8\textwidth]{Figures/pipe.png}
+    \caption{Workflow of Physio Denoise}
     \label{fig:modules}
-\end{figure} 
+\end{figure*} 
 
-This tool consists of three main modules, as depicted in Fig.\ref{fig:modules}, 
+Physio Denoise consists of three main modules, as depicted in Fig.\ref{fig:modules}, 
 including preprocessing of fMRI data, preprocessing of physiological data  and noise modeling.
 Briefly, the first modeule preprocesses the raw fMRI data with motion correction, 
 and the second module deals with physiological data and generate the key values,
@@ -37,10 +36,15 @@ TR time, sample rate and working directory.
 
 \textbf{Neurokit2}\cite{Makowski2021neurokit},
 
+\textbf{Click},
+
+
 \subsection{Data Preprocessing}
 
 Although Physio Denoise is used for denoising, the preprocessing of fMRI data is still essential.
-The preprcossing pipeline consists of alignment and motion correction, as it shown in Fig.\ref{fig:graph}.
+The preprcossing pipeline consists of alignment and motion correction.
+% , as it shown in Fig.
+% \ref{fig:graph}.
 
 Alignment chooses the middle volume from the whole fMRI data as reference, and registers the other
 volumes to it. 
@@ -58,12 +62,12 @@ when a voxel that has no brain tissue in it at one point
 suddenly contains tissue due to motion.\cite{poldrack2011handbook}
 
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=0.7\columnwidth]{Figures/gragh.png}
-    \caption{The pipeline of preprocessing of fMRI data}
-    \label{fig:graph}
-\end{figure}
+% \begin{figure}[htp]
+%     \centering
+%     \includegraphics[width=0.7\columnwidth]{Figures/gragh.png}
+%     \caption{The pipeline of preprocessing of fMRI data}
+%     \label{fig:graph}
+% \end{figure}
 
 In order to model the physiological noise model more precisely, 
 this step aims to clean the raw data roughly as the fisrt step.
@@ -181,5 +185,10 @@ Z-value maps from each contrast will show the specific region according to each 
 A z-map with a given threshold indicates the regions in which 
 some noise signal is well expained by the according regressor.
 In other words, it displays the region that physiological noise exsists. 
+From the statistical analysis, the area of physiological noise is plotted for all regressors.
+Moreover, clusters from GLM model with ROI are extracted. With the weight values from the results of GLM model, 
+temporal signals are easily constructed for ROI as well as a frequency spectrum.
 
+\subsection{Usage}
 
+The usage of Physio Denois is straightfoward.

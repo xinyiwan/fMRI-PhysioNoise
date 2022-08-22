@@ -59,11 +59,11 @@ def physio_denoise(func, struc, physio, outfile, tr, order, samplerate):
     prep(func, struc, outfile)
     tag = getregressors(physio, outfile, tr, order, samplerate)
 
-    path = os.path.join(outfile,"prep", "motion/_realign0")
+    path = os.path.join(outfile,"Preprocess", "motion/_realign0")
     in_file = [f for f in os.listdir(path) if f.endswith('.nii.gz')]
     in_file = os.path.join(path, in_file[0])
-    regressors = open(os.path.join(outfile,"physio","regressors.csv"),"r")
-    denoise(in_file, outfile, tag, regressors)
+    regressors = open(os.path.join(outfile,"Regressors","regressors.csv"),"r")
+    denoise(in_file, outfile, tag, regressors,tr)
 
 if __name__ == '__main__':
     physio_denoise()

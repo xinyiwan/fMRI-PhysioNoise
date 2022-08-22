@@ -28,7 +28,7 @@ def getregressors(txtpath, workdir, tr, order, samplerate):
     if not os.path.exists(workdir):
         os.mkdir(workdir)
 
-    workdir = workdir + "/physio"
+    workdir = workdir + "/Regressors"
     
     if not os.path.exists(workdir):
         os.mkdir(workdir)
@@ -66,7 +66,7 @@ def getregressors(txtpath, workdir, tr, order, samplerate):
     rsp_info = rsp[0]
     phase = rsp_info['RSP_Phase']
     phase_c = pd.DataFrame(phase)
-    phase_c.to_csv(workdir + '/rsp_phase.csv', index = None)
+    # phase_c.to_csv(workdir + '/rsp_phase.csv', index = None)
     # get phase value of respiration and cardiac
     
     resp_phase = getphase_res(df, tag, phase, workdir)
@@ -115,7 +115,7 @@ def pulse_detect(mri, workdir,tr):
 
     # Invoke the next line 
     # when using the middle time of scanning to be the frame time
-    tag = [x+int(tr*5000) for x in tag]
+    # tag = [x+int(tr*5000) for x in tag]
 
     df = pd.DataFrame(tag)
     df.to_csv(workdir + '/mri_pulse.csv', index = None)
@@ -126,9 +126,9 @@ def getphase_ppg(ppg, t_scan, workdir):
     # Use heartpy to detect peaks
     working_data, measures = hp.process(ppg, 10000.0)
 
-    #plot with different title
+    #plot with different title_
     fig = hp.plotter(working_data, measures, title='Heart Beat Detection on Noisy Signal', show = False)
-    # fig.plt.savefig(workdir + "/heartbet.png")
+    # fig.plt.savefig(workdir + "/heartbeat.png")
 
     peak = working_data.get("peaklist")
     phase_ppg = []
@@ -138,7 +138,6 @@ def getphase_ppg(ppg, t_scan, workdir):
         t1 = peak[idx]
         t2 = peak[idx+1]
         res = 2*math.pi*(p-t1)/(t2-t1)
-        # print(t1,t2,p,p-t1,t2-t1,res)
         phase_ppg.append(res)
     
     return phase_ppg
@@ -150,7 +149,7 @@ def getphase_res(df, t_scan, phase, workdir):
     resp[:,0] = df[:,1]
 
     # Mark the unreliable data segments
-    resp[:,1] = np.where(resp[:,0] > 0.04, False, True)
+    resp[:,1] = np.where(resp[:,0] > 0.09, False, True)
 
     # Get the max and min value of respiration data
     max_value = np.max(resp[np.where(resp[:,1] == True),0])

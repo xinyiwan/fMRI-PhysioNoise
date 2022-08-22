@@ -9,8 +9,6 @@ from nibabel import load
 import click
 from nipype.interfaces.io import SelectFiles, DataSink
 
-
-
 # @click.command()
 # @click.argument("func", type=click.Path())
 # @click.argument("struct", type=click.Path())
@@ -21,15 +19,15 @@ def prep(func,struct,outfile):
     #Check/create working path
     if not os.path.exists(outfile):
         os.mkdir(outfile)
-    outfile = outfile + "/prep" 
+    outfile = outfile + "/Preprocess" 
     if not os.path.exists(outfile):
         os.mkdir(outfile)
     
     preproc = pe.Workflow(name='preproc')
     inputnode = pe.Node(interface=util.IdentityInterface(fields=['func','struct',]),
                     name='inputspec')
-    # inputnode.inputs.func = abspath('/Users/xinyi/Desktop/data/subject/sub01.nii')
-    # inputnode.inputs.struct = abspath('/Users/xinyi/Desktop/data/subject/struct.nii')
+
+
     inputnode.inputs.func = abspath(func)
     inputnode.inputs.struct = abspath(struct)
 
@@ -60,11 +58,7 @@ def prep(func,struct,outfile):
     preproc.connect(img2float,('out_file', pickfirst), extract_ref, 'in_file')
     preproc.connect(inputnode, ('func', getmiddlevolume), extract_ref, 't_min')
 
-    # Datasink - creates output folder for important outputs
-
-    # experiment_dir = '/Users/xinyi/Desktop/data/subject'
-    # output_dir = '/Users/xinyi/Desktop/data/subject/datasink/prep0711'
-
+    # Datasink - create output folder for important outputs
     datasink = Node(DataSink(base_directory=outfile),
                     name="datasink")
 

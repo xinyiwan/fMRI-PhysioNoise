@@ -20,14 +20,14 @@ from nilearn.maskers import NiftiSpheresMasker
 from nilearn.reporting import get_clusters_table
 
 
-@click.command()
-@click.argument("infile", type=click.Path())
-@click.argument("outfile", type=click.Path())
-@click.argument("t_scan", type=click.Path())
-@click.argument("regressors", type=click.Path())
+# @click.command()
+# @click.argument("infile", type=click.Path())
+# @click.argument("outfile", type=click.Path())
+# @click.argument("t_scan", type=click.Path())
+# @click.argument("regressors", type=click.Path())
 
 
-def denoise(infile, outfile, t_scan, regressors):
+def denoise(infile, outfile, t_scan, regressors,tr):
 
 
     '''This function uses regressros from biosignal to remove noise from fMRI data
@@ -62,7 +62,7 @@ def denoise(infile, outfile, t_scan, regressors):
     if not os.path.exists(outfile):
         mkdir(outfile)
     
-    outDir = outfile + "/results"
+    outDir = outfile + "/Denoise"
     if not os.path.exists(outDir):
         mkdir(outDir)
 
@@ -77,9 +77,13 @@ def denoise(infile, outfile, t_scan, regressors):
         add_reg_names.append('L%s'%i)
     
     # input the time of scanning
-    with open(t_scan) as file_name:
-        frame_times = np.loadtxt(file_name)
-    frame_times = frame_times[1:]
+    # with open(t_scan) as file_name:
+    frame_times = t_scan
+    # frame_times = frame_times[1:]
+
+    # with open(t_scan) as file_name:
+    #     frame_times = np.loadtxt(file_name)
+    # frame_times = frame_times[1:]
 
     # Define the empty tasks conditions
     conditions = []
@@ -101,14 +105,14 @@ def denoise(infile, outfile, t_scan, regressors):
 
 
     
-    fig, (ax1) = plt.subplots(figsize=(10, 6), nrows=1, ncols=1)
+    fig, (ax1) = plt.subplots(figsize=(10, 8), nrows=1, ncols=1)
     plot_design_matrix(X1, ax=ax1)
     ax1.set_title('Nuisance-related design matrix', fontsize=12)
     fig.savefig(outDir + '/design_matrix.png')
 
 
     # Build the 1st level model
-    fmri_glm = FirstLevelModel(t_r=1.7, minimize_memory=False, signal_scaling = False)
+    fmri_glm = FirstLevelModel(t_r = tr, minimize_memory=False, signal_scaling = False)
 
     # Get the number of components and constant(residual)
     n_columns = X1.shape[1]
@@ -129,12 +133,13 @@ def denoise(infile, outfile, t_scan, regressors):
     for i in range(index):
         z_img = fmri_glm.compute_contrast(contrasts[i], 
                          output_type='z_score')
-        nib.save(z_img, os.path.join(outDir,"zstat_%s.nii.gz"%i))
+        # nib.save(z_img, os.path.join(outDir,"zstat_%s.nii.gz"%i))
         # Plot the contrasts
         plotting.plot_stat_map(
             z_img,
             bg_img=mean, threshold=2, 
             title="zsta_component_%s"%i,
+            draw_cross=False,
             output_file = os.path.join(outDir,"zstat_cont_%s.png"%i))
     # Save the residual data for the further use
 
@@ -173,7 +178,7 @@ def denoise(infile, outfile, t_scan, regressors):
         roi_img.add_markers([coords[i]], colors[i], 300)
 
         # plotting frequency specturm
-        frequency, power_spectrum = make_specturm(predicted_timeseries[:, i],1.7)
+        frequency, power_spectrum = make_specturm(predicted_timeseries[:, i],tr)
         axs1[2, i].plot(frequency, power_spectrum)
 
     fig1.set_size_inches(24, 14)
@@ -190,5 +195,5 @@ def make_specturm(data,tr):
 
     return frequency,power_spectrum
 
-if __name__ == '__main__':
-    denoise()
+# if __name__ == '__main__':
+#     denoise()
