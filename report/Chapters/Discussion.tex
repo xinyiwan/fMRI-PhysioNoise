@@ -1,0 +1,21 @@
+Physio Denoise is a robust denoising tool for fMRI data. 
+Proceeding the raw txt file of physiological data with advanced biosignal detecting tools, 
+Physio Denoise could calculate the regressors for RETROICOR model directly.
+In the meanwhile, Physio Denoise has strong visualization in outputs.
+Important figures in the main step are generated for users to better understand the process.
+And intermediate varaibles are able to trace back the calculating process.
+In the results, all the noise components of high contrast 
+are shown in the background of a structural brain image, which
+is easy to relate brain structure to the possible reasons for explaining the noise.
+The spectrum of predicted noise could also be used to analyze noise in frequency domain.
+
+However, there are still several crucial problems and concern with Physio Denoise.
+
+First, the whole inplementation of Physio Noise is based on RETROICOR and GLM. 
+However, the nuisance regressors in the noise model are not completely linear independent 
+and may exhibit shared variance.\cite{bright2017potential} Those correlated regressors might 
+add more difficulty to interpreting the influence from each component.
+One possible solution to this problem is to include additional combined regressors from
+both respiratory and cardiac signals. Then the influence from correlated regressors 
+could be taken into consideration. 
+

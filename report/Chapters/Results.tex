@@ -33,21 +33,21 @@ To simplify the output lists, the main outputs in each step from Physio Denoise 
     }
   [Output directory
     [Step1 Preprocess
-      [Display pipeline and dataflow]
-      [motion correction
-        [corrected data]
+      [Figuers of pipeline and dataflow]
+      [<motion correction>
+        [corrected NII data]
         [translation and rotations]
         ]
     ]
     [Step2 Regressors
-      [detected scan pulse]
-      [regressors]
+      [MRI pulses csv]
+      [regressors csv]
       [respiration histogram]
     ]
     [Step3 Denoise
       [designed matrix]
-      [Z-maps]
-      [denoised data]
+      [statistical z-maps]
+      [denoised NII data]
       [clusters and ROI]
     ]
   ]
@@ -85,11 +85,27 @@ are silmilar to those of 1st order.
 
 \begin{figure}[htp]
   \centering
-  \includegraphics[width=0.9\columnwidth]{Figures/brain.jpeg}
+  \includegraphics[width=\columnwidth]{Figures/brain.jpeg}
   \caption{Structure of veins inside brain. 1. Superior sagittal sinus; 2. Inferior sagittal sinus;
   3. Straight sinus; 4. Transverse sinus; 5. Sigmoid sinus; 6. Internal jugular vein   }
   \label{fig:brain}
 \end{figure} 
+
+Besides the ROI regions of high contrast for each component, clusters are extracted to show the region,
+temporal signals and frequency spectrums. In Fig.\ref{fig:clusters}, raw signals, predicted noise signals and 
+denoised signals of each cluster are shown in the 1st row.
+
+
+
+
+\begin{figure}[htp]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{Figures/clusters.png}
+  \caption{Five Clusters from components. In the 1st row, each graph includes raw BOLD signal(Red), predicted noise signal(Green) and 
+  denoised signal. In the 2nd row, it shows positions of each cluster. In the 3rd row, frequency spectrums are of predicted noise signals.}
+  \label{fig:clusters}
+\end{figure} 
+
 
 
 
