@@ -1,0 +1,37 @@
+Physio Denoise is a robust denoising tool for fMRI data. 
+Proceeding the raw txt file of physiological data with advanced bio-signal detecting tools, 
+Physio Denoise could calculate the regressors for RETROICOR model directly.
+In the meanwhile, Physio Denoise has strong visualization in outputs.
+Important figures in the main step are generated for users to better understand the process.
+And intermediate variables are able to trace back the calculating process.
+In the results, all the noise components of high contrast 
+are shown in the background of a structural brain image, which
+is easy to relate brain structure to the possible reasons for explaining the noise.
+The spectrum of predicted noise could also be used to analyze noise in frequency domain.
+
+However, there are still several crucial problems and concern with Physio Denoise.
+
+First, the whole implementation of Physio Noise is based on RETROICOR model and GLM. 
+The nuisance regressors in the noise model are not completely linear independent 
+and may exhibit shared variance \cite{bright2017potential}.
+Those correlated regressors might 
+add more difficulty to interpreting the influence from each component.
+One possible solution to this problem is to include additional combined regressors into the model
+from both respiratory and cardiac signals. Then the influence from correlated regressors 
+could be taken into consideration. 
+
+As mentioned previously, another related problem about the potential correlation 
+between nuisance regressors and real neuronal events. 
+Cardiac pulsation results in brain tissue movement and 
+inflow effects leading to correlated signal fluctuations primarily 
+in and near large blood vessels \cite{dagli1999localization}. The movement of the chest wall during breathing results 
+in magnetic field changes that distort the MR image acquired of the brain \cite{brosch2002simulation}.
+Moreover, Cerebrospinal fluid (CSF) inside brain will be manipulated by both respiration and cardiac cycles.
+
+The concern with design of Physio Denoise is applying regressors to the entire brain. 
+Apparently, physiological influence cannot be removed by the use of a single nuisance regressor 
+for the entire brain (such as global signal regression) due to the 
+clear regional heterogeneity of the physiologically-coupled responses. \cite{chen2020resting}
+Step like regional division could be applied to the data before regression, which could lead to more precise
+denoising.
+
